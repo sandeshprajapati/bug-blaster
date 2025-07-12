@@ -22,6 +22,17 @@ export default function ticketReducer(state, action) {
       return { ...state, editTicket: action.payload };
     case "CLEAR_EDIT_TICKET":
       return { ...state, editTicket: null };
+    case "SORT_TICKETS":
+      return {
+        ...state,
+        tickets: state.tickets.sort((a, b) => {
+          if (action.payload === "High to Low") {
+            return b.priority - a.priority;
+          } else {
+            return a.priority - b.priority;
+          }
+        }),
+      };
     default:
       return state;
   }

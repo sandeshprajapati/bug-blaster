@@ -17,6 +17,19 @@ function App() {
         {state.tickets.length > 0 && (
           <div className="results">
             <h2> All Tickets</h2>
+            <p>
+              <select
+                onChange={(e) => {
+                  dispatch({
+                    type: "SORT_TICKETS",
+                    payload: e.target.value,
+                  });
+                }}
+              >
+                <option value="High to Low">High to Low</option>
+                <option value="Low to High">Low to High</option>
+              </select>
+            </p>
             <TicketList tickets={state.tickets} dispatch={dispatch} />
           </div>
         )}
