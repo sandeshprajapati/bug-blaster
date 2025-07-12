@@ -1,13 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles.css";
 
-export default function TicketForm({ dispatch }) {
+export default function TicketForm({ dispatch, editTicket }) {
   //ticket
   const [ticket, setTicket] = useState("");
   // description
   const [description, setDescription] = useState("");
   // priority
   const [priority, setPriority] = useState("");
+
+  useEffect(() => {
+    if (editTicket) {
+      setTicket(editTicket.ticket);
+      setDescription(editTicket.description);
+      setPriority(editTicket.priority);
+    } else {
+      clearForm();
+    }
+  }, [editTicket]);
 
   const priorityLabels = {
     1: "Low",
@@ -24,14 +34,22 @@ export default function TicketForm({ dispatch }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const ticketData = {
-      id: new Date().toISOString(),
+      id: editTicket ? editTicket.id : new Date().toISOString(),
       ticket,
       description,
       priority,
     };
-    dispatch({ type: "ADD_TICKET", payload: ticketData });
+    dispatch({
+      type: editTicket ? "UPDATE_TICKET" : "ADD_TICKET",
+      payload: ticketData,
+    });
     console.log(ticketData);
     clearForm();
+  };
+
+  const handleCancel = () => {
+    clearForm();
+    dispatch({ type: "CLEAR_EDIT_TICKET" });
   };
 
   return (
@@ -72,6 +90,11 @@ export default function TicketForm({ dispatch }) {
       <button type="submit" onSubmit={handleSubmit} className="button">
         Submit
       </button>
+      {editTicket && (
+        <button type="button" onClick={handleCancel} className="button">
+          Cancel
+        </button>
+      )}
     </form>
   );
 }

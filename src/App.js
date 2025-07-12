@@ -6,14 +6,14 @@ import { useReducer } from "react";
 import TicketList from "./components/TicketList";
 
 function App() {
-  const intialState = { tickets: [] };
+  const intialState = { tickets: [], editTicket: null };
 
   const [state, dispatch] = useReducer(ticketReducer, intialState);
 
   return (
     <div className="App">
       <div className="container">
-        <TicketForm dispatch={dispatch} />
+        <TicketForm dispatch={dispatch} editTicket={state.editTicket} />
         {state.tickets.length > 0 && (
           <div className="results">
             <h2> All Tickets</h2>
